@@ -29,32 +29,32 @@
 				<img src="images/img-01.png" alt="IMG">
 			</div>
 
-			<form method = 'GET' class="contact1-form validate-form">
+			<form method="GET" class="contact1-form validate-form">
 				<span class="contact1-form-title">
 					CST Blog
 				</span>
 
 				<div class="wrap-input1 validate-input" data-validate = "Name is required">
-					<input class="input1" type="text" name="name" placeholder="Name">
+					<input id = 'name' class="input1" type="text" name="name" placeholder="Name">
 					<span class="shadow-input1"></span>
 				</div>
 
 				<div class="wrap-input1 validate-input" data-validate = "Title is required">
-					<input class="input1" type="text" name="title" placeholder="Title">
+					<input id='title' class="input1" type="text" name="title" placeholder="Title">
 					<span class="shadow-input1"></span>
 				</div>
 
 				<div class="wrap-input1 validate-input">
-					<input class="input1" type="text" name="preview" placeholder="Preview">
+					<input id='preview' class="input1" type="text" name="preview" placeholder="Preview">
 					<span class="shadow-input1"></span>
 				</div>
-				<div class="wrap-input1 validate-input" data-validate = "Message is required">
-					<textarea class="input1" name="message" placeholder="Message"></textarea>
+				<div class="wrap-input1 validate-input" data-validate = "Blog is required">
+					<textarea id='message' class="input1" name="message" placeholder="Blog Content"></textarea>
 					<span class="shadow-input1"></span>
 				</div>
 
 				<div class="container-contact1-form-btn">
-					<button class="contact1-form-btn">
+					<button type = 'button' onclick='postBlog()' class="contact1-form-btn">
 						<span>
 							Post
 							<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
@@ -64,6 +64,7 @@
 			</form>
 		</div>
 	</div>
+
 
 
 	<script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
@@ -85,6 +86,33 @@
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+	function postBlog(){
+		var name = document.getElementById('name').value;
+		var title = document.getElementById('title').value;
+		var preview = document.getElementById('preview').value;
+		var mess = document.getElementById('message').value;
+		if(name == '' || title == '' || preview == '' || mess == ''){
+			alert("Please Fill out the Required Forms!");
+		}else{
+		firebase.database().ref('CST/blogs/').push({
+			name: name,
+			title: title,
+			preview: preview,
+			message: mess,
+			date: Math.round(new Date().getTime()/1000.0)
+		}).then(function(){
+			alert('Successfully Posted!');
+			document.getElementById('message').value = '';
+			document.getElementById('preview').value = '';
+			document.getElementById('title').value = '';
+			document.getElementById('name').value = '';
+		}).catch(function(){
+			alert("We don't know what went wrong... Try again Later!");
+		});
+	}
+}
+</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
